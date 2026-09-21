@@ -68,7 +68,7 @@
 
   async function pushState() {
     if (!token) { $("push-state").innerHTML = '<span class="msg-err">Falta el token: abre la app desde el link que te dieron (…?token=…).</span>'; return; }
-    if (!CFG.instanceId) { $("push-state").innerHTML = '<span class="msg-err">config.js sin instanceId (correr build_mobile.sh).</span>'; return; }
+    if (!CFG.instanceId && !CFG.vapidPublicKey) { $("push-state").innerHTML = '<span class="msg-err">Falta config.js (correr build_mobile.sh y volver a publicar).</span>'; return; }
     if (!("Notification" in window) || !("PushManager" in window)) {
       $("push-state").textContent = ios && !standalone
         ? "En iPhone: primero agrega la app a la pantalla de inicio y ábrela desde el ícono."
