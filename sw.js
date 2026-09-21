@@ -1,12 +1,16 @@
 /* AstrOlmué — service worker: push (Pusher Beams) + bandeja local + caché para abrir sin red */
 importScripts("vendor/beams-sw.js");
 
-const CACHE = "astrolmue-mobile-v2";
-const ASSETS = ["./", "index.html", "app.css", "app.js", "config.js", "vendor/beams.js", "logo.svg", "wordmark.svg", "manifest.json"];
+const CACHE = "astrolmue-mobile-v3";
+const ASSETS = ["./", "index.html", "404.html", "app.css", "app.js", "config.js", "vendor/beams.js", "logo.svg", "wordmark.svg", "manifest.json"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS).catch(() => {}))); self.skipWaiting(); });
 self.addEventListener("activate", (e) => { e.waitUntil(self.clients.claim()); });
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET" || new URL(e.request.url).pathname.includes("/api/")) return;
+  if (e.request.mode === "navigate") {   // …/<token>/ → la app (GitHub Pages responde con 404.html)
+    e.respondWith(fetch(e.request).catch(() => caches.match("404.html").then((r) => r || caches.match("index.html"))));
+    return;
+  }
   e.respondWith(fetch(e.request).then((r) => { const c = r.clone(); caches.open(CACHE).then((k) => k.put(e.request, c)); return r; })
     .catch(() => caches.match(e.request)));
 });

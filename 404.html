@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AstrOlmué</title>
+<style>html{background:#070a12}</style>
+<script>
+// GitHub Pages sirve esta página para …/astrolmue-app/<token>/ : cargamos la app con la base correcta
+(function () {
+  var base = location.pathname.replace(/[^/]+\/?$/, "");
+  fetch(base + "index.html").then(function (r) { return r.text(); }).then(function (html) {
+    html = html.replace(/<head>/i, '<head><base href="' + base + '">');
+    document.open(); document.write(html); document.close();
+  }).catch(function () { location.replace(base + "?token=" + (location.pathname.match(/\/([a-z0-9]{8,24})\/?$/) || [])[1]); });
+})();
+</script></head><body></body></html>

@@ -10,8 +10,10 @@
   const q = new URLSearchParams(location.search);
   // el token se queda en la URL a propósito: al "Agregar a pantalla de inicio" el ícono guarda esta URL
   // (en iPhone la app instalada no comparte almacenamiento con Safari)
-  if (q.get("token")) LS.set("token", q.get("token"));
-  const token = q.get("token") || LS.get("token");
+  // formato preferido: …/astrolmue-app/<token>/  (iOS conserva la ruta, pero descarta ?token= al instalar)
+  const mPath = location.pathname.match(/\/([a-z0-9]{8,24})\/?$/);
+  const token = (mPath && mPath[1]) || q.get("token") || LS.get("token");
+  if (token) LS.set("token", token);
   const interest = token ? `astrolmue-${token}` : null;
 
   // ---- bandeja en IndexedDB (la escribe también el service worker) -----------
