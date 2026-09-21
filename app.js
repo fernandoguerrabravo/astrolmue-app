@@ -67,7 +67,11 @@
   let swReg = null;
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").then((r) => { swReg = r; }).catch(() => {});
-    navigator.serviceWorker.addEventListener("message", (e) => { if (e.data?.type === "notification") render(); });
+    navigator.serviceWorker.addEventListener("message", (e) => {
+      if (e.data?.type !== "notification") return;
+      if (e.data.registered) { try { localStorage.removeItem("pending-reg"); } catch {} $("push-msg").innerHTML = '<span class="msg-ok">✓ Registrado en el Mac.</span>'; }
+      render();
+    });
   }
 
   async function pushState() {
@@ -81,7 +85,9 @@
     if (Notification.permission === "granted" && LS.get("subscribed") === "1") {
       $("push-state").innerHTML = `<span class="msg-ok">✓ Activadas en este dispositivo (${useWebPush ? "Web Push" : "Pusher Beams"})</span>`;
       $("btn-push").hidden = true;
-      if (useWebPush && LS.get("sub")) showSub(LS.get("sub"));
+      const pend = LS.get("pending-reg");
+      if (pend && CFG.home) registrar(JSON.parse(pend), LS.get("sub"));
+      else if (useWebPush && LS.get("sub") && LS.get("sub-registered") !== "1") showSub(LS.get("sub"));
       return;
     }
     $("push-state").textContent = Notification.permission === "denied"
@@ -99,18 +105,41 @@
       if (useWebPush) {
         const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(CFG.vapidPublicKey) });
         LS.set("subscribed", "1"); LS.set("sub", JSON.stringify(sub));
-        showSub(JSON.stringify(sub));
+        await registrar({ token, sub: JSON.stringify(sub) }, JSON.stringify(sub));
       } else {
         const client = new PusherPushNotifications.Client({ instanceId: CFG.instanceId, serviceWorkerRegistration: reg });
         await client.start();
         await client.addDeviceInterest(interest);
         LS.set("subscribed", "1");
-        $("push-msg").innerHTML = '<span class="msg-ok">Listo. Pide una notificación de prueba desde el Mac.</span>';
+        await registrar({ token, beams: 1 }, null);
       }
       pushState();
     } catch (e) { $("push-msg").innerHTML = `<span class="msg-err">${esc(e.message || e)}</span>`; }
   };
-  // iPhone: la suscripción hay que dársela al Mac una vez (copiar → pegar en el chat de Claude, tool "notificaciones registrar")
+  // registro del dispositivo en el Mac (una sola vez):
+  //  1) en casa, por la red local: abre http://<mac>:3000/api/app/registrar?… (CFG.home) — sin terceros
+  //  2) relay ntfy (CFG.relay), si está configurado
+  //  3) manual: copiar la suscripción y pegarla en el chat
+  async function registrar(params, subJson) {
+    if (CFG.relay) {
+      try {
+        const r = await fetch(CFG.relay, { method: "POST", body: JSON.stringify(subJson ? { token, subscription: JSON.parse(subJson) } : { token, beams: true }) });
+        if (r.ok) { LS.set("sub-registered", "1"); $("push-msg").innerHTML = '<span class="msg-ok">Listo. En menos de un minuto llega un aviso de confirmación.</span>'; return; }
+      } catch {}
+    }
+    if (CFG.home) {
+      LS.set("sub-registered", "1");
+      const u = CFG.home.replace(/\/$/, "") + "/api/app/registrar?" + new URLSearchParams(params).toString();
+      $("push-msg").innerHTML = `<div class="mapp-hint">Registrando en el Mac (tienes que estar en la misma Wi-Fi)…</div>
+        <a class="primary" style="display:block;text-align:center;text-decoration:none;padding:9px;border-radius:10px;background:var(--accent);color:#06101f;font-weight:600;margin-top:8px" href="${u}" target="_blank" rel="noopener">Registrar en el Mac</a>
+        <div class="mapp-hint" style="margin-top:6px">Si no estás en casa, hazlo cuando llegues: el botón queda aquí.</div>`;
+      LS.set("pending-reg", JSON.stringify(params));
+      return;
+    }
+    if (subJson) showSub(subJson);
+    else $("push-msg").innerHTML = '<span class="msg-ok">Listo. Pide una notificación de prueba desde el Mac.</span>';
+  }
+  // respaldo manual (si el relay no está configurado): la suscripción hay que dársela al Mac una vez (copiar → pegar en el chat de Claude, tool "notificaciones registrar")
   function showSub(json) {
     const reg = LS.get("sub-registered") === "1";
     $("push-msg").innerHTML = reg ? '<span class="msg-ok">Suscripción registrada en el Mac.</span>' : `

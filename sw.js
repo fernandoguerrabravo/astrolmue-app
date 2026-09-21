@@ -51,7 +51,7 @@ self.addEventListener("push", (e) => {
   e.waitUntil((async () => {
     try { await store(n); } catch {}
     const cs = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-    cs.forEach((c) => c.postMessage({ type: "notification" }));
+    cs.forEach((c) => c.postMessage({ type: "notification", registered: /activadas/i.test(p.title || "") }));
     await self.registration.showNotification(p.title, { body: p.body, icon: "icon-192.png", badge: "icon-192.png", tag: "astrolmue-" + (d.id || Date.now()), data: d });
   })());
 });
