@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 64" width="520" height="64">
+  <!-- AstrOlmué Chile — logotipo horizontal (fondo transparente) -->
+  <g transform="translate(0 0) scale(0.5)">
+    <ellipse cx="64" cy="78" rx="46" ry="12" fill="none" stroke="#6EA8FF" stroke-width="3" opacity="0.55" transform="rotate(-16 64 78)"/>
+    <path fill="#F2B84B" stroke-linejoin="round" d="M64 44 L72.2 63.2 L93 64.9 L77.2 78.5 L82 98.8 L64 88 L46 98.8 L50.8 78.5 L35 64.9 L55.8 63.2 Z"/>
+    <path d="M27 92 A46 12 0 0 0 101 92" fill="none" stroke="#6EA8FF" stroke-width="3" opacity="0.9" transform="rotate(-16 64 78) translate(0 -14)"/>
+    <g transform="translate(64 47) rotate(-7)">
+      <ellipse cx="0" cy="0" rx="36" ry="7" fill="#A87A47"/>
+      <path d="M-16 0.5 L-14.5 -17 Q0 -21 14.5 -17 L16 0.5 Z" fill="#8B5E34"/>
+      <path d="M-15.3 -8 Q0 -11.5 15.3 -8 L15.6 -3.5 Q0 -7 -15.6 -3.5 Z" fill="#2F5AA8"/>
+      <ellipse cx="0" cy="0" rx="36" ry="7" fill="none" stroke="#6E4A28" stroke-width="1.2"/>
+    </g>
+  </g>
+  <text x="74" y="41" font-family="-apple-system, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="1" fill="#DBE3F2">Astr<tspan fill="#6EA8FF">Olmué</tspan></text>
+  <text x="76" y="56" font-family="-apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" letter-spacing="3.2" fill="#7F8BA3">CHILE · CENTRO DE CONTROL ASTRONÓMICO</text>
+</svg>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070a12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AstrOlmué">
+<title>AstrOlmué</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="mapp">
+  <header class="mapp-head">
+    <img src="wordmark.svg" alt="AstrOlmué Chile">
+    <span class="mapp-badge" id="badge" hidden>0</span>
+  </header>
+
+  <section class="card" id="install-hint" hidden>
+    <p class="mapp-hint">Para tenerla como app: <b>Compartir → Agregar a pantalla de inicio</b> y ábrela desde el ícono. En iPhone es necesario para recibir notificaciones.</p>
+  </section>
+
+  <section class="card">
+    <h3>Notificaciones push</h3>
+    <div id="push-state" class="mapp-hint">…</div>
+    <button class="primary" id="btn-push" hidden>Activar notificaciones</button>
+    <div id="push-msg" class="mapp-hint"></div>
+  </section>
+
+  <section class="card mapp-night" id="night" hidden>
+    <h3 id="night-title"></h3>
+    <p id="night-text"></p>
+    <div class="mapp-targets" id="night-targets"></div>
+  </section>
+
+  <section class="card">
+    <div class="row">
+      <h3>Bandeja</h3>
+      <button class="ghost small" id="btn-read">marcar leídas</button>
+      <button class="ghost small" id="btn-clear">vaciar</button>
+    </div>
+    <div id="inbox"><p class="mapp-hint">Todavía no llega ninguna notificación. Cuando el Mac avise (alerta de la noche, captura terminada, fotos nuevas…) aparecerá aquí, aunque la app esté cerrada.</p></div>
+  </section>
+
+  <p class="mapp-hint center" id="device-info"></p>
+
+  <footer class="mapp-hint center">AstrOlmué Chile · app privada</footer>
+</div>
+<script src="config.js"></script>
+<script src="vendor/beams.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
