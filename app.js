@@ -8,8 +8,10 @@
 
   // ---- token de dispositivo (viene en el link ?token=…) ----------------------
   const q = new URLSearchParams(location.search);
-  if (q.get("token")) { LS.set("token", q.get("token")); history.replaceState({}, "", location.pathname); }
-  const token = LS.get("token");
+  // el token se queda en la URL a propósito: al "Agregar a pantalla de inicio" el ícono guarda esta URL
+  // (en iPhone la app instalada no comparte almacenamiento con Safari)
+  if (q.get("token")) LS.set("token", q.get("token"));
+  const token = q.get("token") || LS.get("token");
   const interest = token ? `astrolmue-${token}` : null;
 
   // ---- bandeja en IndexedDB (la escribe también el service worker) -----------

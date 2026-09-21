@@ -1,7 +1,7 @@
 /* AstrOlmué — service worker: push (Pusher Beams) + bandeja local + caché para abrir sin red */
 importScripts("vendor/beams-sw.js");
 
-const CACHE = "astrolmue-mobile-v1";
+const CACHE = "astrolmue-mobile-v2";
 const ASSETS = ["./", "index.html", "app.css", "app.js", "config.js", "vendor/beams.js", "logo.svg", "wordmark.svg", "manifest.json"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS).catch(() => {}))); self.skipWaiting(); });
 self.addEventListener("activate", (e) => { e.waitUntil(self.clients.claim()); });
