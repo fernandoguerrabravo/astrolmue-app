@@ -34,3 +34,5 @@ input { font: inherit; flex: 1; min-width: 0; background: var(--bg); color: var(
 .mapp-title { font-size: 13.5px; color: var(--dim); }
 .mapp-body { font-size: 13px; line-height: 1.45; }
 .mapp-when { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+.btn-link{display:inline-block;text-decoration:none;text-align:center;padding:10px 14px;border-radius:10px;background:var(--accent,#3b7dff);color:#fff;font-weight:600}

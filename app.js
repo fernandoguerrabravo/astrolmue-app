@@ -161,6 +161,10 @@
     $("night-targets").innerHTML = "";
   }
 
+  if (CFG.home && token) {
+    $("live-card").hidden = false;
+    $("live-link").href = CFG.home.replace(/\/$/, "") + "/api/app/live?token=" + encodeURIComponent(token);
+  }
   $("device-info").textContent = token ? `Dispositivo: ${token}` : "";
   render(); pushState(); loadNight();
   document.addEventListener("visibilitychange", () => { if (!document.hidden) { render(); loadNight(); } });
